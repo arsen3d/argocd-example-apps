@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app
+  labels:
+    app: react-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      # Add init container for build process
+      initContainers:
+      - name: build
+        image: node:16 # Use appropriate Node.js version
+        command: 
+        - /bin/sh
+        - -c
+        - |
+          cd /app
+          npm install
+          npm run build
+        volumeMounts:
+        - name: source
+          mountPath: /app
+        - name: build
+          mountPath: /app/build
+      
+      containers:
+      - name: react-app
+        image: nginx:alpine # Using nginx to serve the built files
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: build
+          mountPath: /usr/share/nginx/html
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+      
+      volumes:
+      - name: source
+        configMap:
+          name: react-source-code
+      - name: build
+        emptyDir: {}
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+---
+# ConfigMap for nginx configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name localhost;
+        
+        location / {
+            root /usr/share/nginx/html;
+            try_files $uri $uri/ /index.html;
+            index index.html;
+        }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app-service
+spec:
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
