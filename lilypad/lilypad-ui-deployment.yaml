@@ -2,10 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: lilypad-ui
-  labels:
-    app: lilypad-ui
+  namespace: lilypad
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: lilypad-ui
@@ -15,66 +14,64 @@ spec:
         app: lilypad-ui
     spec:
       initContainers:
-      - name: git-clone
-        image: alpine/git
-        args:
-        - clone
-        - --single-branch
-        - https://github.com/your-org/lilypad-ui.git
-        - /workspace
-        volumeMounts:
-        - name: workspace
-          mountPath: /workspace
-
-      - name: build-push
-        image: docker:latest
-        workingDir: /workspace
-        command: ["/bin/sh", "-c"]
-        args:
+      - name: build
+        image: node:16
+        command: 
+        - /bin/sh
+        - -c
         - |
-          docker build -t registry:5000/lilypad-ui:latest .
-          docker push registry:5000/lilypad-ui:latest
+          cd /workspace
+          npm install
+          npm run build
         volumeMounts:
         - name: workspace
           mountPath: /workspace
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
-
+        - name: build
+          mountPath: /workspace/build
+      
       containers:
-      - name: lilypad-ui
-        image: registry:5000/lilypad-ui:latest
+      - name: nginx
+        image: nginx:alpine
         ports:
         - containerPort: 80
-
+        volumeMounts:
+        - name: build
+          mountPath: /usr/share/nginx/html
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+      
       volumes:
       - name: workspace
         emptyDir: {}
-      - name: docker-socket
-        hostPath:
-          path: /var/run/docker.sock
- 
-# ConfigMap for nginx configuration
+      - name: build
+        emptyDir: {}
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
+  namespace: lilypad
 data:
   default.conf: |
     server {
         listen 80;
         server_name localhost;
-        
         location / {
             root /usr/share/nginx/html;
             try_files $uri $uri/ /index.html;
             index index.html;
         }
     }
- 
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: react-app-service
+  name: lilypad-ui
+  namespace: lilypad
 spec:
   selector:
     app: lilypad-ui
