@@ -1,56 +1,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-app
+  name: lilypad-ui
   labels:
-    app: react-app
+    app: lilypad-ui
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: react-app
+      app: lilypad-ui
   template:
     metadata:
       labels:
-        app: react-app
+        app: lilypad-ui
     spec:
-      # Add init container for build process
       initContainers:
-      - name: build
-        image: node:16 # Use appropriate Node.js version
-        command: 
-        - /bin/sh
-        - -c
-        - |
-          cd /app
-          npm install
-          npm run build
+      - name: git-clone
+        image: alpine/git
+        args:
+        - clone
+        - --single-branch
+        - https://github.com/your-org/lilypad-ui.git
+        - /workspace
         volumeMounts:
-        - name: source
-          mountPath: /app
-        - name: build
-          mountPath: /app/build
-      
+        - name: workspace
+          mountPath: /workspace
+
+      - name: build-push
+        image: docker:latest
+        workingDir: /workspace
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          docker build -t registry:5000/lilypad-ui:latest .
+          docker push registry:5000/lilypad-ui:latest
+        volumeMounts:
+        - name: workspace
+          mountPath: /workspace
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+
       containers:
-      - name: react-app
-        image: nginx:alpine # Using nginx to serve the built files
+      - name: lilypad-ui
+        image: registry:5000/lilypad-ui:latest
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: build
-          mountPath: /usr/share/nginx/html
-        - name: nginx-config
-          mountPath: /etc/nginx/conf.d
-      
+
       volumes:
-      - name: source
-        configMap:
-          name: react-source-code
-      - name: build
+      - name: workspace
         emptyDir: {}
-      - name: nginx-config
-        configMap:
-          name: nginx-config
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
 ---
 # ConfigMap for nginx configuration
 apiVersion: v1
@@ -76,7 +77,7 @@ metadata:
   name: react-app-service
 spec:
   selector:
-    app: react-app
+    app: lilypad-ui
   ports:
     - protocol: TCP
       port: 80
@@ -98,4 +99,3 @@ data:
     COPY --from=builder /app/build /usr/share/nginx/html
     EXPOSE 80
     CMD ["nginx", "-g", "daemon off;"]
-  
