@@ -26,25 +26,4 @@ spec:
     app: registry
   ports:
   - port: 5000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-frontend
-spec:
-  selector:
-    app: nginx-frontend
-  ports:
-  - port: 80
-    targetPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: lilypad-ui
-spec:
-  selector:
-    app: lilypad-ui
-  ports:
-  - port: 3000
-    targetPort: 3000
+

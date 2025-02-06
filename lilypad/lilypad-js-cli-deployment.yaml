@@ -68,3 +68,15 @@ spec:
       # - name: nginx-config
       #   configMap:
       #     name: nginx-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lilypad-ui
+spec:
+  selector:
+    app: lilypad-ui
+  ports:
+  - port: 3000
+    targetPort: 3000
