@@ -25,13 +25,3 @@ spec:
       - name: nginx-config
         configMap:
           name: nginx-config
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-frontend
-spec:
-  selector:
-    app: nginx-frontend
-  ports:
-  - port: 80
-    targetPort: 80
