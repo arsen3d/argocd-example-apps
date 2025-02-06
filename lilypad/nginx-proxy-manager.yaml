@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-proxy-manager
+  namespace: lilypad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-proxy-manager
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy-manager
+    spec:
+      containers:
+      - name: nginx-proxy-manager
+        image: jc21/nginx-proxy-manager:2.11.2
+        ports:
+        - containerPort: 81
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+      - name: cloudflare
+        image: cloudflare/cloudflared:latest
+        command: ["tunnel","--no-autoupdate", "run"]
+        envFrom:
+        - secretRef:
+            name: lpauth
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"      
+      #   volumeMounts:
+      #   - name: nginx-config
+      #     mountPath: /etc/nginx/conf.d
+      # volumes:
+      # - name: nginx-config
+      #   configMap:
+      #     name: nginx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-proxy-manager
+spec:
+  selector:
+    app: nginx-proxy-manager
+  ports:
+  - port: 81
+    targetPort: 81
+
+# ---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: nginx-config
+# data:
+#    nginx.conf: |
+#     server {
+#       listen 80;
+#       server_name localhost;
+#       location / {
+#       proxy_pass http://lilypad-ui:3000;
+#       proxy_http_version 1.1;
+#       proxy_set_header Upgrade $http_upgrade;
+#       proxy_set_header Connection 'upgrade';
+#       proxy_set_header Host $host;
+#       proxy_cache_bypass $http_upgrade;
+#       }
+#     }
