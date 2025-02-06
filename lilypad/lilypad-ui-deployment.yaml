@@ -29,7 +29,10 @@ spec:
       - name: run
         image: node:16
         ports:
-        - containerPort: 3000   # Add this to expose the Node.js port
+        - containerPort: 3000
+        envFrom:
+        - secretRef:
+            name: lpauth    # Reference to the secret containing env vars
         command: 
         - /bin/sh
         - -c
@@ -37,12 +40,9 @@ spec:
           cd /workspace
           npm install
           npm run dev
-          # cp -r build/* /build/
         volumeMounts:
         - name: workspace
           mountPath: /workspace
-        # - name: build
-        #   mountPath: /build
       # - name: nginx
       #   image: nginx:alpine
       #   ports:
