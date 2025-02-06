@@ -15,11 +15,11 @@ spec:
       labels:
         app: cloudflared
     spec:
-      dnsPolicy: "None"  # Override default DNS policy
-      dnsConfig:
-        nameservers:
-          - "1.1.1.1"
-          - "8.8.8.8"
+      # dnsPolicy: "None"  # Override default DNS policy
+      # dnsConfig:
+      #   nameservers:
+      #     - "1.1.1.1"
+      #     - "8.8.8.8"
       containers:
       - name: cloudflared
         image: cloudflare/cloudflared:latest
