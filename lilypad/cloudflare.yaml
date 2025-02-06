@@ -55,6 +55,9 @@ spec:
             secretKeyRef:
               name: lpauth
               key: CLOUDFLARED_TOKEN
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
         # envFrom:
         # - secretRef:
         #     name: lpauth
