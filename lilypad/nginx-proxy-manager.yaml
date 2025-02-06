@@ -16,6 +16,9 @@ spec:
       containers:
       - name: nginx-proxy-manager
         image: jc21/nginx-proxy-manager:2.11.2
+        volumes:
+          - ./data:/data
+          - ./letsencrypt:/etc/letsencrypt
         ports:
         - containerPort: 81
         resources:
@@ -27,7 +30,7 @@ spec:
             cpu: "250m"
       - name: cloudflare
         image: cloudflare/cloudflared:latest
-        command: ["tunnel","--no-autoupdate", "run"]
+        command: ["cloudflare","tunnel","--no-autoupdate", "run"]
         envFrom:
         - secretRef:
             name: lpauth
