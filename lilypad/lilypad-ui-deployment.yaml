@@ -53,9 +53,9 @@ spec:
       #   - name: nginx-config
       #     mountPath: /etc/nginx/conf.d
           
-      # volumes:
-      # - name: workspace
-      #   emptyDir: {}
+      volumes:
+      - name: workspace
+        emptyDir: {}
       # - name: build
       #   emptyDir: {}
       # - name: nginx-config
