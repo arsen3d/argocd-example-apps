@@ -20,7 +20,7 @@ spec:
         - /bin/sh
         - -c
         - |
-          git clone https://github.com/bacalhau-project/lilypad-ui.git /workspace
+          git clone https://github.com/Lilypad-Tech/js-cli-wrapper.git /workspace
         volumeMounts:
         - name: workspace
           mountPath: /workspace
