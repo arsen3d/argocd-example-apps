@@ -61,19 +61,19 @@ spec:
   resources:
     requests:
       storage: 1Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: app
-  namespace: lilypad
-spec:
-  selector:
-    app: app
-  ports:
-  - name: admin
-    port: 81
-    targetPort: 81
-  - name: http
-    port: 80
-    targetPort: 80
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: appservice
+#   namespace: lilypad
+# spec:
+#   selector:
+#     app: app
+#   ports:
+#   - name: admin
+#     port: 81
+#     targetPort: 81
+#   - name: http
+#     port: 80
+#     targetPort: 80
