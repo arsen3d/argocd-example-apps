@@ -42,7 +42,7 @@ spec:
       #     mountPath: /build
       
       containers:
-        - name: run
+      - name: run
         image: node:16
         command: 
         - /bin/sh
