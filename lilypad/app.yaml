@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-proxy-manager
+  name: app
   namespace: lilypad
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-proxy-manager
+      app: app
   template:
     metadata:
       labels:
-        app: nginx-proxy-manager
+        app: app
     spec:
       containers:
-      - name: nginx-proxy-manager
+      - name: app
         image: jc21/nginx-proxy-manager:2.11.2
         # envFrom:
         # - secretRef:
@@ -33,32 +33,6 @@ spec:
           requests:
             memory: "64Mi"
             cpu: "250m"
-      - name: cloudflare
-        image: cloudflare/cloudflared:2024.11.1
-        # command: ["cloudflared","tunnel","--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
-        # command: ["cloudflared","tunnel", "--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
-        command::
-        - /bin/sh
-        - -c
-        - |
-          cloudflared tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
-        envFrom:
-        - secretRef:
-            name: lpauth
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-          requests:
-            memory: "64Mi"
-            cpu: "250m"
-      volumes:
-      - name: npm-data
-        persistentVolumeClaim:
-          claimName: npm-data-pvc
-      - name: npm-letsencrypt
-        persistentVolumeClaim:
-          claimName: npm-letsencrypt-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -87,10 +61,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-proxy-manager
+  name: app
 spec:
   selector:
-    app: nginx-proxy-manager
+    app: app
   ports:
   - port: 81
     targetPort: 81
