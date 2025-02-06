@@ -41,23 +41,23 @@ spec:
         volumeMounts:
         - name: workspace
           mountPath: /workspace
-        - name: build
-          mountPath: /build
-      - name: nginx
-        image: nginx:alpine
-        ports:
-        - containerPort: 80
-        volumeMounts:
         # - name: build
-        #   mountPath: /usr/share/nginx/html
-        - name: nginx-config
-          mountPath: /etc/nginx/conf.d
+        #   mountPath: /build
+      # - name: nginx
+      #   image: nginx:alpine
+      #   ports:
+      #   - containerPort: 80
+      #   volumeMounts:
+      #   # - name: build
+      #   #   mountPath: /usr/share/nginx/html
+      #   - name: nginx-config
+      #     mountPath: /etc/nginx/conf.d
           
-      volumes:
-      - name: workspace
-        emptyDir: {}
-      - name: build
-        emptyDir: {}
-      - name: nginx-config
-        configMap:
-          name: nginx-config
+      # volumes:
+      # - name: workspace
+      #   emptyDir: {}
+      # - name: build
+      #   emptyDir: {}
+      # - name: nginx-config
+      #   configMap:
+      #     name: nginx-config
