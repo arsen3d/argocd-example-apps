@@ -41,10 +41,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: lilupad-ui
+  name: lilypad-ui
 spec:
   selector:
-    app: lilupad-ui
+    app: lilypad-ui
   ports:
   - port: 3000
     targetPort: 3000
