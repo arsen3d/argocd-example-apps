@@ -24,26 +24,12 @@ spec:
         volumeMounts:
         - name: workspace
           mountPath: /workspace
-
-      # - name: build
-      #   image: node:16
-      #   command: 
-      #   - /bin/sh
-      #   - -c
-      #   - |
-      #     cd /workspace
-      #     npm install
-      #     npm run dev
-      #     # cp -r build/* /build/
-      #   volumeMounts:
-      #   - name: workspace
-      #     mountPath: /workspace
-      #   - name: build
-      #     mountPath: /build
       
       containers:
       - name: run
         image: node:16
+        ports:
+        - containerPort: 3000   # Add this to expose the Node.js port
         command: 
         - /bin/sh
         - -c
@@ -62,8 +48,8 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: build
-          mountPath: /usr/share/nginx/html
+        # - name: build
+        #   mountPath: /usr/share/nginx/html
         - name: nginx-config
           mountPath: /etc/nginx/conf.d
           
