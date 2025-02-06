@@ -1,53 +1,70 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudflared
+  name: cloudflare
   namespace: lilypad
-  labels:
-    app: cloudflared
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloudflared
+      app: cloudflare
   template:
     metadata:
       labels:
-        app: cloudflared
+        app: cloudflare
     spec:
       containers:
-      - name: cloudflared
+      # - name: cloudflare
+      #   image: jc21/nginx-proxy-manager:2.11.2
+      #   # envFrom:
+      #   # - secretRef:
+      #   #     name: npm-secret
+      #   volumeMounts:
+      #   - name: npm-data
+      #     mountPath: /data
+      #   - name: npm-letsencrypt
+      #     mountPath: /etc/letsencrypt
+      #   ports:
+      #   - containerPort: 81
+      #   resources:
+      #     limits:
+      #       memory: "128Mi"
+      #       cpu: "500m"
+      #     requests:
+      #       memory: "64Mi"
+      #       cpu: "250m"
+      - name: cloudflare
         image: cloudflare/cloudflared:2024.11.1
+        # command: ["cloudflared","tunnel","--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
+        # command: ["cloudflared","tunnel", "--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
+        # command::
+        # - /bin/sh
+        # - -c
+        # - |
+        #   cloudflared tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
         args:
         - "tunnel"
         - "--no-autoupdate"
         - "run"
         - "--token"
         - "$(CLOUDFLARED_TOKEN)"
+
         env:
         - name: CLOUDFLARED_TOKEN
           valueFrom:
             secretKeyRef:
               name: lpauth
               key: CLOUDFLARED_TOKEN
+        # envFrom:
+        # - secretRef:
+        #     name: lpauth
         resources:
           limits:
-            cpu: "500m"
-            memory: "256Mi"
-          requests:
-            cpu: "100m"
             memory: "128Mi"
-        securityContext:
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          capabilities:
-            add: ["NET_ADMIN"]
-        livenessProbe:
-          tcpSocket:
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 30
-      restartPolicy: Always
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
       volumes:
       - name: npm-data
         persistentVolumeClaim:
