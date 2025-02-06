@@ -16,9 +16,14 @@ spec:
       containers:
       - name: nginx-proxy-manager
         image: jc21/nginx-proxy-manager:2.11.2
-        volumes:
-          - ./data:/data
-          - ./letsencrypt:/etc/letsencrypt
+        envFrom:
+        - secretRef:
+            name: npm-secret
+        volumeMounts:
+        - name: npm-data
+          mountPath: /data
+        - name: npm-letsencrypt
+          mountPath: /etc/letsencrypt
         ports:
         - containerPort: 81
         resources:
@@ -40,14 +45,38 @@ spec:
             cpu: "500m"
           requests:
             memory: "64Mi"
-            cpu: "250m"      
-      #   volumeMounts:
-      #   - name: nginx-config
-      #     mountPath: /etc/nginx/conf.d
-      # volumes:
-      # - name: nginx-config
-      #   configMap:
-      #     name: nginx-config
+            cpu: "250m"
+      volumes:
+      - name: npm-data
+        persistentVolumeClaim:
+          claimName: npm-data-pvc
+      - name: npm-letsencrypt
+        persistentVolumeClaim:
+          claimName: npm-letsencrypt-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: npm-data-pvc
+  namespace: lilypad
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: npm-letsencrypt-pvc
+  namespace: lilypad
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -59,23 +88,3 @@ spec:
   ports:
   - port: 81
     targetPort: 81
-
-# ---
-# apiVersion: v1
-# kind: ConfigMap
-# metadata:
-#   name: nginx-config
-# data:
-#    nginx.conf: |
-#     server {
-#       listen 80;
-#       server_name localhost;
-#       location / {
-#       proxy_pass http://lilypad-ui:3000;
-#       proxy_http_version 1.1;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection 'upgrade';
-#       proxy_set_header Host $host;
-#       proxy_cache_bypass $http_upgrade;
-#       }
-#     }
