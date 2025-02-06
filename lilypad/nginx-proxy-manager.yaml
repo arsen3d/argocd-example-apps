@@ -35,7 +35,7 @@ spec:
             cpu: "250m"
       - name: cloudflare
         image: cloudflare/cloudflared:latest
-        command: ["cloudflare","tunnel","--no-autoupdate", "run"]
+        command: ["cloudflared","tunnel","--no-autoupdate", "run"]
         envFrom:
         - secretRef:
             name: lpauth
