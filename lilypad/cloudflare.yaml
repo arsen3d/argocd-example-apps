@@ -1,115 +1,50 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: cloudflare
+  name: cloudflared
   namespace: lilypad
+  labels:
+    app: cloudflared
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloudflare
+      app: cloudflared
   template:
     metadata:
       labels:
-        app: cloudflare
+        app: cloudflared
     spec:
+      dnsPolicy: "None"  # Override default DNS policy
+      dnsConfig:
+        nameservers:
+          - "1.1.1.1"
+          - "8.8.8.8"
       containers:
-      # - name: cloudflare
-      #   image: jc21/nginx-proxy-manager:2.11.2
-      #   # envFrom:
-      #   # - secretRef:
-      #   #     name: npm-secret
-      #   volumeMounts:
-      #   - name: npm-data
-      #     mountPath: /data
-      #   - name: npm-letsencrypt
-      #     mountPath: /etc/letsencrypt
-      #   ports:
-      #   - containerPort: 81
-      #   resources:
-      #     limits:
-      #       memory: "128Mi"
-      #       cpu: "500m"
-      #     requests:
-      #       memory: "64Mi"
-      #       cpu: "250m"
-      - name: cloudflare
+      - name: cloudflared
         image: cloudflare/cloudflared:latest
-        # command: ["cloudflared","tunnel","--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
-        # command: ["cloudflared","tunnel", "--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
-        # command::
-        # - /bin/sh
-        # - -c
-        # - |
-        #   cloudflared tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
         args:
         - "tunnel"
         - "--no-autoupdate"
         - "run"
         - "--token"
         - "$(CLOUDFLARED_TOKEN)"
-
         env:
         - name: CLOUDFLARED_TOKEN
           valueFrom:
             secretKeyRef:
               name: lpauth
               key: CLOUDFLARED_TOKEN
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
         securityContext:
           capabilities:
             add: ["NET_ADMIN"]
-        # envFrom:
-        # - secretRef:
-        #     name: lpauth
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-          requests:
-            memory: "64Mi"
-            cpu: "250m"
-      volumes:
-      - name: npm-data
-        persistentVolumeClaim:
-          claimName: npm-data-pvc
-      - name: npm-letsencrypt
-        persistentVolumeClaim:
-          claimName: npm-letsencrypt-pvc
-# ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: npm-data-pvc
-#   namespace: lilypad
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 1Gi
-# ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: npm-letsencrypt-pvc
-#   namespace: lilypad
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 1Gi
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: nginx-proxy-manager
-# spec:
-#   selector:
-#     app: nginx-proxy-manager
-#   ports:
-#   - port: 81
-#     targetPort: 81
 ---
 apiVersion: v1
 kind: Service
@@ -117,7 +52,7 @@ metadata:
   name: cloudflared-metrics
 spec:
   selector:
-    app: cloudflare
+    app: cloudflared
   ports:
     - protocol: TCP
       port: 8080
@@ -132,7 +67,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: cloudflare
+      app: cloudflared
   policyTypes:
     - Egress
   egress:
@@ -144,3 +79,26 @@ spec:
           port: 7844
         - protocol: TCP
           port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: lilypad
+spec:
+  podSelector:
+    matchLabels:
+      app: cloudflared
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 1.1.1.1/32
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
