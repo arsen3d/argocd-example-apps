@@ -34,7 +34,7 @@ spec:
       #       memory: "64Mi"
       #       cpu: "250m"
       - name: cloudflare
-        image: cloudflare/cloudflared:2024.11.1
+        image: cloudflare/cloudflared:latest
         # command: ["cloudflared","tunnel","--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
         # command: ["cloudflared","tunnel", "--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
         # command::
