@@ -25,7 +25,24 @@ spec:
         - name: workspace
           mountPath: /workspace
 
-      - name: build
+      # - name: build
+      #   image: node:16
+      #   command: 
+      #   - /bin/sh
+      #   - -c
+      #   - |
+      #     cd /workspace
+      #     npm install
+      #     npm run dev
+      #     # cp -r build/* /build/
+      #   volumeMounts:
+      #   - name: workspace
+      #     mountPath: /workspace
+      #   - name: build
+      #     mountPath: /build
+      
+      containers:
+        - name: run
         image: node:16
         command: 
         - /bin/sh
@@ -40,8 +57,6 @@ spec:
           mountPath: /workspace
         - name: build
           mountPath: /build
-      
-      containers:
       - name: nginx
         image: nginx:alpine
         ports:
