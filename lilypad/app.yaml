@@ -65,7 +65,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: appservice
+  name: app
 spec:
   selector:
     app: app
