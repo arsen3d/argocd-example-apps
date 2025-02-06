@@ -22,7 +22,7 @@ spec:
           - "8.8.8.8"
       containers:
       - name: cloudflared
-        image: cloudflare/cloudflared:2023.10.0
+        image: cloudflare/cloudflared:latest
         args:
         - "tunnel"
         - "run"
