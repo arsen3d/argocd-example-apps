@@ -47,11 +47,17 @@ spec:
         - --no-autoupdate
         - run
         - --token
-        - "${CLOUDFLARED_TOKEN}"
+        - ${CLOUDFLARED_TOKEN}
 
-        envFrom:
-        - secretRef:
-            name: lpauth
+        env:
+        - name: CLOUDFLARED_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: lpauth
+              key: CLOUDFLARED_TOKEN
+        # envFrom:
+        # - secretRef:
+        #     name: lpauth
         resources:
           limits:
             memory: "128Mi"
