@@ -42,63 +42,63 @@ spec:
           requests:
             memory: "256Mi"
             cpu: "250m"
-        securityContext:
-          capabilities:
-            add: ["NET_ADMIN"]
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cloudflared-metrics
-spec:
-  selector:
-    app: cloudflared
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 44801
-  type: ClusterIP
+#         securityContext:
+#           capabilities:
+#             add: ["NET_ADMIN"]
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: cloudflared-metrics
+# spec:
+#   selector:
+#     app: cloudflared
+#   ports:
+#     - protocol: TCP
+#       port: 8080
+#       targetPort: 44801
+#   type: ClusterIP
 
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-cloudflared-egress
-spec:
-  podSelector:
-    matchLabels:
-      app: cloudflared
-  policyTypes:
-    - Egress
-  egress:
-    - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0  # Allow internet access
-      ports:
-        - protocol: UDP
-          port: 7844
-        - protocol: TCP
-          port: 443
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-dns
-  namespace: lilypad
-spec:
-  podSelector:
-    matchLabels:
-      app: cloudflared
-  policyTypes:
-  - Egress
-  egress:
-  - to:
-    - ipBlock:
-        cidr: 1.1.1.1/32
-    - ipBlock:
-        cidr: 8.8.8.8/32
-    ports:
-    - protocol: UDP
-      port: 53
-    - protocol: TCP
-      port: 53
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: allow-cloudflared-egress
+# spec:
+#   podSelector:
+#     matchLabels:
+#       app: cloudflared
+#   policyTypes:
+#     - Egress
+#   egress:
+#     - to:
+#         - ipBlock:
+#             cidr: 0.0.0.0/0  # Allow internet access
+#       ports:
+#         - protocol: UDP
+#           port: 7844
+#         - protocol: TCP
+#           port: 443
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: allow-dns
+#   namespace: lilypad
+# spec:
+#   podSelector:
+#     matchLabels:
+#       app: cloudflared
+#   policyTypes:
+#   - Egress
+#   egress:
+#   - to:
+#     - ipBlock:
+#         cidr: 1.1.1.1/32
+#     - ipBlock:
+#         cidr: 8.8.8.8/32
+#     ports:
+#     - protocol: UDP
+#       port: 53
+#     - protocol: TCP
+#       port: 53
