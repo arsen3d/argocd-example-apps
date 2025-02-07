@@ -61,14 +61,26 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: local-pv
+  name: npm-data-pv
 spec:
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /var/lib/rancher/data
+    path: /var/lib/rancher/data/npm-data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: npm-letsencrypt-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/rancher/data/npm-letsencrypt
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -81,7 +93,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: local-pv
+  volumeName: npm-data-pv
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -94,7 +106,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: local-pv
+  volumeName: npm-letsencrypt-pv
 ---
 apiVersion: v1
 kind: Service
