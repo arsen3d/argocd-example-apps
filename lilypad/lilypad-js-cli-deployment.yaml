@@ -74,9 +74,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: lilypad-ui-service
+  namespace: lilypad
 spec:
   selector:
     app: lilypad-ui
   ports:
-  - port: 3000
-    targetPort: 3000
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+  labels:
+    app: lilypad-ui
