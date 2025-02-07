@@ -30,8 +30,8 @@ spec:
         #   value: "1000"
         - name: DEBUG 
           value: "true"  
-        - name: DEVELOPMENT 
-          value: "true"    
+        # - name: DEVELOPMENT 
+        #   value: "true"    
         ports:
         - containerPort: 81
         resources:
