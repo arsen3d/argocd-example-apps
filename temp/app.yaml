@@ -38,26 +38,6 @@ spec:
       - name: npm-letsencrypt
         persistentVolumeClaim:
           claimName: npm-letsencrypt-pvc
-      - name: cloudflared
-        image: cloudflare/cloudflared:latest
-        args:
-        - "tunnel"
-        - "run"
-        - "--token"
-        - "$(CLOUDFLARED_TOKEN)"
-        env:
-        - name: CLOUDFLARED_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: lpauth
-              key: CLOUDFLARED_TOKEN
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-          requests:
-            memory: "256Mi"
-            cpu: "250m"      
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
