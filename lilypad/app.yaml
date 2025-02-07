@@ -53,15 +53,15 @@ spec:
       volumes:
       - name: npm-data
         persistentVolumeClaim:
-          claimName: npm-data-pvc
+          claimName: npm-data-pvc1
       - name: npm-letsencrypt
         persistentVolumeClaim:
-          claimName: npm-letsencrypt-pvc
+          claimName: npm-letsencrypt-pvc1
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: npm-data-pvc
+  name: npm-data-pvc1
   namespace: lilypad
 spec:
   # accessModes:
@@ -73,7 +73,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: npm-letsencrypt-pvc
+  name: npm-letsencrypt-pvc1
   namespace: lilypad
 spec:
   # accessModes:
