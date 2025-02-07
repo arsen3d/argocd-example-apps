@@ -83,5 +83,5 @@ spec:
       port: 3000
       targetPort: 3000
   type: ClusterIP
-  labels:
-    app: lilypad-ui
+  # labels:
+  #   app: lilypad-ui
