@@ -31,13 +31,13 @@ spec:
           requests:
             memory: "64Mi"
             cpu: "250m"
-      volumes:
-      - name: npm-data
-        persistentVolumeClaim:
-          claimName: npm-data-pvc
-      - name: npm-letsencrypt
-        persistentVolumeClaim:
-          claimName: npm-letsencrypt-pvc
+        volumes:
+        - name: npm-data
+          persistentVolumeClaim:
+            claimName: npm-data-pvc
+        - name: npm-letsencrypt
+          persistentVolumeClaim:
+            claimName: npm-letsencrypt-pvc
       - name: cloudflared
         image: cloudflare/cloudflared:latest
         args:
