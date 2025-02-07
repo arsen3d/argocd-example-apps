@@ -63,6 +63,7 @@ kind: PersistentVolume
 metadata:
   name: npm-data-pv
 spec:
+  storageClassName: manual
   capacity:
     storage: 10Gi
   accessModes:
@@ -75,6 +76,7 @@ kind: PersistentVolume
 metadata:
   name: npm-letsencrypt-pv
 spec:
+  storageClassName: manual
   capacity:
     storage: 10Gi
   accessModes:
@@ -88,6 +90,7 @@ metadata:
   name: npm-data-pvc1
   namespace: lilypad
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteMany
   resources:
@@ -101,6 +104,7 @@ metadata:
   name: npm-letsencrypt-pvc1
   namespace: lilypad
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteMany
   resources:
