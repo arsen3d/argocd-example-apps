@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: appn
   namespace: lilypad
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app
+      app: appn
   template:
     metadata:
       labels:
-        app: app
+        app: appn
     spec:
       containers:
-      - name: app
+      - name: appn
         # image: jc21/nginx-proxy-manager:2.11.2
         image: jc21/nginx-proxy-manager:latest
         volumeMounts:
@@ -69,7 +69,7 @@ metadata:
   name: app
 spec:
   selector:
-    app: app
+    app: appn
   ports:
   - name: admin
     port: 81
