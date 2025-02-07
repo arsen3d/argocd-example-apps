@@ -59,6 +59,18 @@ spec:
           claimName: npm-letsencrypt-pvc1
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /mnt/data
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: npm-data-pvc1
@@ -69,6 +81,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  volumeName: local-pv
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -81,6 +94,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  volumeName: local-pv
 ---
 apiVersion: v1
 kind: Service
