@@ -15,7 +15,6 @@ spec:
     spec:
       containers:
       - name: appn
-        # image: jc21/nginx-proxy-manager:2.11.2
         image: jc21/nginx-proxy-manager:latest
         volumeMounts:
         - name: npm-data
@@ -31,13 +30,6 @@ spec:
           requests:
             memory: "64Mi"
             cpu: "250m"
-        volumes:
-        - name: npm-data
-          persistentVolumeClaim:
-            claimName: npm-data-pvc
-        - name: npm-letsencrypt
-          persistentVolumeClaim:
-            claimName: npm-letsencrypt-pvc
       - name: cloudflared
         image: cloudflare/cloudflared:latest
         args:
@@ -57,7 +49,14 @@ spec:
             cpu: "500m"
           requests:
             memory: "256Mi"
-            cpu: "250m"      
+            cpu: "250m"
+      volumes:
+      - name: npm-data
+        persistentVolumeClaim:
+          claimName: npm-data-pvc
+      - name: npm-letsencrypt
+        persistentVolumeClaim:
+          claimName: npm-letsencrypt-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -87,13 +86,17 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app
+  namespace: lilypad
 spec:
   selector:
     app: appn
   ports:
   - name: admin
     port: 81
-#     targetPort: 81
+    targetPort: 81
   - name: http
     port: 80
-    # targetPort: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
