@@ -24,6 +24,10 @@ spec:
         env:
         - name: DISABLE_IPV6
           value: "true"
+        - name: PUID
+          value: "1000"
+        - name: PGID 
+          value: "1000"
         ports:
         - containerPort: 81
         resources:
