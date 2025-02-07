@@ -64,8 +64,8 @@ metadata:
   name: npm-data-pvc
   namespace: lilypad
 spec:
-  accessModes:
-    - ReadWriteOnce 
+  # accessModes:
+  #   - ReadWriteOnce 
   resources:
     requests:
       storage: 1Gi
@@ -76,8 +76,8 @@ metadata:
   name: npm-letsencrypt-pvc
   namespace: lilypad
 spec:
-  accessModes:
-    - ReadWriteOnce 
+  # accessModes:
+  #   - ReadWriteOnce 
   resources:
     requests:
       storage: 1Gi
