@@ -130,3 +130,28 @@ spec:
   # - name: https
   #   port: 443
   #   targetPort: 443
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lilypad-network-policy
+  namespace: lilypad
+spec:
+  podSelector:
+    matchLabels:
+      app: lilypad-ui
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: lilypad
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: lilypad
