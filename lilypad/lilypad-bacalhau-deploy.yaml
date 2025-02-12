@@ -1,6 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: bacalhau-test
+  labels:
+    app: bacalhau
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bacalhau
+  template:
+    metadata:
+      labels:
+        app: bacalhau
+    spec:
+      containers:
+        - name: bacalhau
+          image: ghcr.io/bacalhau-project/bacalhau:latest
+          command: ["bacalhau"]
+          args: ["serve", "--orchestrator", "--compute"]
+          env:
+            - name: DOCKER_HOST
+              value: "tcp://docker-service:2375"  # Connect to the Docker pod
+---              
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: docker-dind
   labels:
     app: docker
@@ -42,28 +67,4 @@ spec:
       port: 2375
       targetPort: 2375
   type: ClusterIP
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: bacalhau-test
-  labels:
-    app: bacalhau
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: bacalhau
-  template:
-    metadata:
-      labels:
-        app: bacalhau
-    spec:
-      containers:
-        - name: bacalhau
-          image: ghcr.io/bacalhau-project/bacalhau:latest
-          command: ["bacalhau"]
-          args: ["serve", "--orchestrator", "--compute"]
-          env:
-            - name: DOCKER_HOST
-              value: "tcp://docker-service:2375"  # Connect to the Docker pod
+
