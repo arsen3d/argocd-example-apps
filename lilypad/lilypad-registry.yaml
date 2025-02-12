@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: registry
+  namespace: lilypad
 spec:
   selector:
     matchLabels:
@@ -20,6 +21,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: lilypad
   name: registry
 spec:
   selector:
