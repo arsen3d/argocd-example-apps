@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bacalhau-test
+  name: bacalhau
   labels:
     app: bacalhau
 spec:
