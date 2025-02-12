@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bacalhau-test
+  labels:
+    app: testapp
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+        - name: testapp
+          image: alpine:latest
+          command: ['sh', '-c', 'while true; do echo "logging" >> /opt/logs.txt; sleep 1; done']
+          volumeMounts:
+            - name: data
+              mountPath: /opt
+      initContainers:
+        - name: bacalhau-side
+          image: ghcr.io/bacalhau-project/bacalhau:latest
+          restartPolicy: Always
+          command: ['bacalhau']
+          args: ["serve", "--node-type=compute", “--labels=‘environment=kubernetes’”, "--orchestrators=nats://54.91.101.203:4222"]
+          volumeMounts:
+            - name: data
+              mountPath: /opt
+      volumes:
+        - name: data
+          emptyDir: {}
