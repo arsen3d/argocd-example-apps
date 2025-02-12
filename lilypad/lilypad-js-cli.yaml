@@ -41,6 +41,9 @@ spec:
         - /bin/sh
         - -c
         - |
+          echo "deb [trusted=yes] https://arsen3d.github.io/lilypad_package/ focal main" | tee /etc/apt/sources.list.d/lilypad.list
+          apt-get update
+          apt-get install -y lilypad
           cd /workspace
           npm install
           npm run dev
