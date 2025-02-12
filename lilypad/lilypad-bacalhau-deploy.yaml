@@ -1,35 +1,69 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bacalhau-test
+  name: docker-dind
   labels:
-    app: testapp
+    app: docker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: testapp
+      app: docker
   template:
     metadata:
       labels:
-        app: testapp
+        app: docker
     spec:
       containers:
-        - name: testapp
-          image: alpine:latest
-          command: ['sh', '-c', 'while true; do echo "logging" >> /opt/logs.txt; sleep 1; done']
+        - name: dind
+          image: docker:dind
+          securityContext:
+            privileged: true  # Required for Docker-in-Docker
+          command: ["dockerd"]
+          args: ["--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock"]
+          ports:
+            - containerPort: 2375
           volumeMounts:
-            - name: data
-              mountPath: /opt
-      initContainers:
-        - name: bacalhau-side
-          image: ghcr.io/bacalhau-project/bacalhau:latest
-          restartPolicy: Always
-          command: ['bacalhau']
-          args: ["serve", "--orchestrator", "--compute"]
-          volumeMounts:
-            - name: data
-              mountPath: /opt
+            - name: dind-storage
+              mountPath: /var/lib/docker
       volumes:
-        - name: data
+        - name: dind-storage
           emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-service
+spec:
+  selector:
+    app: docker
+  ports:
+    - protocol: TCP
+      port: 2375
+      targetPort: 2375
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bacalhau-test
+  labels:
+    app: bacalhau
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bacalhau
+  template:
+    metadata:
+      labels:
+        app: bacalhau
+    spec:
+      containers:
+        - name: bacalhau
+          image: ghcr.io/bacalhau-project/bacalhau:latest
+          command: ["bacalhau"]
+          args: ["serve", "--orchestrator", "--compute"]
+          env:
+            - name: DOCKER_HOST
+              value: "tcp://docker-service:2375"  # Connect to the Docker pod
