@@ -26,7 +26,7 @@ spec:
           image: ghcr.io/bacalhau-project/bacalhau:latest
           restartPolicy: Always
           command: ['bacalhau']
-          args: ["serve", "--node-type=compute", “--labels=‘environment=kubernetes’”, "--orchestrators=nats://54.91.101.203:4222"]
+          args: ["serve", "--orchestrator", "--compute"]
           volumeMounts:
             - name: data
               mountPath: /opt
