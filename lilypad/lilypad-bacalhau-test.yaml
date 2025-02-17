@@ -14,6 +14,10 @@ spec:
           # nvidia.com/gpu: 1 # requesting 1 GPU
           cpu: "1000m" # requesting 1 CPU
           memory: "2Gi" # requesting 2Gi of memory
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add: ["SYS_ADMIN"]
       # command:
       #   - "nvidia-smi"
       #   - "--query-gpu=name,memory.total,memory.free,memory.used,utilization.gpu,utilization.memory"
