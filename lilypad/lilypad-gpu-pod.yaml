@@ -8,11 +8,11 @@ spec:
   containers:
     - name: cuda-container
       image: nvcr.io/nvidia/k8s/cuda-sample:vectoradd-cuda12.5.0
-      resources:
-        limits:
-          nvidia.com/gpu: 1 # requesting 1 GPU
-          cpu: "1000m" # requesting 1 CPU
-          memory: "2Gi" # requesting 2Gi of memory
+      # resources:
+      #   limits:
+      #     nvidia.com/gpu: 1 # requesting 1 GPU
+      #     cpu: "1000m" # requesting 1 CPU
+      #     memory: "2Gi" # requesting 2Gi of memory
   tolerations:
   - key: nvidia.com/gpu
     operator: Exists
