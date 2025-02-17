@@ -21,6 +21,12 @@ spec:
       # command: ["bacalhau"]
       # args: ["serve", "--orchestrator", "--compute"]
       # args: ["agent", "config"]
+      volumeMounts:
+        - name: bacalhau-data
+          mountPath: /root/.bacalhau
+  volumes:
+    - name: bacalhau-data
+      emptyDir: {}
 tolerations:
 - key: nvidia.com/gpu
   operator: Exists
