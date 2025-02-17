@@ -15,7 +15,7 @@ spec:
           cpu: "1000m" # requesting 1 CPU
           memory: "2Gi" # requesting 2Gi of memory
       securityContext:
-        allowPrivilegeEscalation: false
+        # allowPrivilegeEscalation: false
         capabilities:
           add: ["SYS_ADMIN","NET_RAW"]
         runAsUser: 0
