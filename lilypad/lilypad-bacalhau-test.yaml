@@ -28,6 +28,9 @@ spec:
       volumeMounts:
         - name: bacalhau-data
           mountPath: /root/.bacalhau
+      env:
+        - name: BACALHAU_ENVIRONMENT
+          value: "local"
   volumes:
     - name: bacalhau-data
       emptyDir: {}
