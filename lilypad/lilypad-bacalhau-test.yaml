@@ -25,7 +25,7 @@ spec:
       #   - "nvidia-smi"
       #   - "--query-gpu=name,memory.total,memory.free,memory.used,utilization.gpu,utilization.memory"
       #   - "--format=csv,noheader,nounits"
-      command:
+      entrypoint:
         - /bin/sh
         - -c
         - "./run && bacalhau serve --orchestrator --compute"
