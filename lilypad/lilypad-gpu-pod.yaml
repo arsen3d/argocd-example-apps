@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: gpu-pod
+  namespace: default
 spec:
   restartPolicy: Never
   containers:
@@ -10,6 +11,8 @@ spec:
       resources:
         limits:
           nvidia.com/gpu: 1 # requesting 1 GPU
+          cpu: "1000m" # requesting 1 CPU
+          memory: "2Gi" # requesting 2Gi of memory
   tolerations:
   - key: nvidia.com/gpu
     operator: Exists
