@@ -10,7 +10,7 @@ spec:
       image: ghcr.io/bacalhau-project/bacalhau:latest
       resources:
         limits:
-          nvidia.com/gpu: 1 # requesting 1 GPU
+          # nvidia.com/gpu: 1 # requesting 1 GPU
           cpu: "1000m" # requesting 1 CPU
           memory: "2Gi" # requesting 2Gi of memory
       # command:
