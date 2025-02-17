@@ -1,47 +1,45 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: bacalhautest
-  # namespace: default
 spec:
-  restartPolicy: Never
-  containers:
-    - name: bacalhautest
-      # image: ghcr.io/bacalhau-project/bacalhau:latest
-      image: ghcr.io/lilypad-tech/bacalhau:latest
-      resources:
-        limits:
-          # nvidia.com/gpu: 1 # requesting 1 GPU
-          cpu: "1000m" # requesting 1 CPU
-          memory: "2Gi" # requesting 2Gi of memory
-      securityContext:
-        # allowPrivilegeEscalation: false
-        capabilities:
-          add: ["SYS_ADMIN","NET_RAW"]
-        runAsUser: 0
-        runAsGroup: 0
-        privileged: true
-      # command:
-      #   - "nvidia-smi"
-      #   - "--query-gpu=name,memory.total,memory.free,memory.used,utilization.gpu,utilization.memory"
-      #   - "--format=csv,noheader,nounits"
-      entrypoint:
-        - /bin/sh
-        - -c
-        - "./run && bacalhau serve --orchestrator --compute"
-      # command: ["bacalhau"]
-      # args: ["serve", "--orchestrator", "--compute"]
-      # args: ["agent", "config"]
-      volumeMounts:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bacalhautest
+  template:
+    metadata:
+      labels:
+        app: bacalhautest
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: bacalhautest
+          image: ghcr.io/lilypad-tech/bacalhau:latest
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+          securityContext:
+            capabilities:
+              add: ["SYS_ADMIN","NET_RAW"]
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+          command:
+            - /bin/sh
+            - -c
+            - "./run && bacalhau serve --orchestrator --compute"
+          volumeMounts:
+            - name: bacalhau-data
+              mountPath: /root/.bacalhau
+          env:
+            - name: BACALHAU_ENVIRONMENT
+              value: "local"
+      volumes:
         - name: bacalhau-data
-          mountPath: /root/.bacalhau
-      env:
-        - name: BACALHAU_ENVIRONMENT
-          value: "local"
-  volumes:
-    - name: bacalhau-data
-      emptyDir: {}
-tolerations:
-- key: nvidia.com/gpu
-  operator: Exists
-  effect: NoSchedule
+          emptyDir: {}
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
