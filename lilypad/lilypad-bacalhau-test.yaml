@@ -19,7 +19,7 @@ spec:
       #   - "--format=csv,noheader,nounits"
   command: ["bacalhau"]
   args: ["serve", "--orchestrator", "--compute"]
-tolerations:
-- key: nvidia.com/gpu
-  operator: Exists
-  effect: NoSchedule
+# tolerations:
+# - key: nvidia.com/gpu
+#   operator: Exists
+#   effect: NoSchedule
