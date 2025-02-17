@@ -18,8 +18,8 @@ spec:
       #   - "nvidia-smi"
       #   - "--query-gpu=name,memory.total,memory.free,memory.used,utilization.gpu,utilization.memory"
       #   - "--format=csv,noheader,nounits"
-      command: ["bacalhau"]
-      args: ["serve", "--orchestrator", "--compute"]
+      # command: ["bacalhau"]
+      # args: ["serve", "--orchestrator", "--compute"]
       # args: ["agent", "config"]
 tolerations:
 - key: nvidia.com/gpu
