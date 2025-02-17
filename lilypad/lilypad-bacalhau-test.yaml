@@ -7,7 +7,8 @@ spec:
   restartPolicy: Never
   containers:
     - name: bacalhautest
-      image: ghcr.io/bacalhau-project/bacalhau:latest
+      # image: ghcr.io/bacalhau-project/bacalhau:latest
+      image: ghcr.io/lilypad-tech/bacalhau:latest
       resources:
         limits:
           # nvidia.com/gpu: 1 # requesting 1 GPU
