@@ -18,6 +18,9 @@ spec:
         allowPrivilegeEscalation: false
         capabilities:
           add: ["SYS_ADMIN","NET_RAW"]
+        runAsUser: 0
+        runAsGroup: 0
+        privileged: true
       # command:
       #   - "nvidia-smi"
       #   - "--query-gpu=name,memory.total,memory.free,memory.used,utilization.gpu,utilization.memory"
