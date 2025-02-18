@@ -34,9 +34,15 @@ spec:
         image: node:22
         ports:
         - containerPort: 3000
-        envFrom:
-        - secretRef:
-            name: lpauth    # Reference to the secret containing env vars
+        # env:
+        # - name: OPENAI_API_KEY
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: openai-api-key-secret
+        #       key: OPENAI_API_KEY
+        # envFrom:
+        # - secretRef:
+        #     name: lpauth    # Reference to the secret containing env vars
         command: 
         - /bin/sh
         - -c
