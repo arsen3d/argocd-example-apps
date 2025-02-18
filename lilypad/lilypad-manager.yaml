@@ -52,8 +52,14 @@ spec:
         - name: CLOUDFLARED_TOKEN
           valueFrom:
             secretKeyRef:
-              name: lpauth
+              name: openai-api-key-secret
               key: CLOUDFLARED_TOKEN
+        # env:
+        # - name: CLOUDFLARED_TOKEN
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: lpauth
+        #       key: CLOUDFLARED_TOKEN
         resources:
           limits:
             memory: "512Mi"
