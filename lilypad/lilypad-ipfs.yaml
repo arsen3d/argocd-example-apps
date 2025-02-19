@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubo
+  template:
+    metadata:
+      labels:
+        app: kubo
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: kubo
+          image: ipfs/kubo:latest
+          # args:
+          #   - "COMPUTTE_MODE=gpu"
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubo-rpc
+spec:
+  selector:
+    app: kubo
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubo-gateway
+spec:
+  selector:
+    app: kubo
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
