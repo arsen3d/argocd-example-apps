@@ -25,6 +25,8 @@ spec:
         - -c
         - |
           git clone https://github.com/Lilypad-Tech/js-cli-wrapper.git /workspace
+          cd /workspace
+          git checkout cors
         volumeMounts:
         - name: workspace
           mountPath: /workspace
