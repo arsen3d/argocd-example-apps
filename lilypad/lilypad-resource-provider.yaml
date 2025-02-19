@@ -16,20 +16,22 @@ spec:
       containers:
         - name: resource-provider
           image: ghcr.io/lilypad-tech/resource-provider:latest
+          args:
+            - "COMPUTTE_MODE=gpu"
           resources:
             limits:
               cpu: "1000m"
               memory: "2Gi"
-          securityContext:
-            capabilities:
-              add: ["SYS_ADMIN","NET_RAW"]
-            runAsUser: 0
-            runAsGroup: 0
-            privileged: true
-          command:
-            - /bin/sh
-            - -c
-            - "./run && bacalhau serve --orchestrator --compute"
+          # securityContext:
+          #   capabilities:
+          #     add: ["SYS_ADMIN","NET_RAW"]
+          #   runAsUser: 0
+          #   runAsGroup: 0
+          #   privileged: true
+          # command:
+          #   - /bin/sh
+          #   - -c
+          #   - "./run && bacalhau serve --orchestrator --compute"
           volumeMounts:
             - name: lilypad-data
               mountPath: /tmp/lilypad/data
