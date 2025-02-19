@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pipelines
+  labels:
+    app: pipelines
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pipelines
+  template:
+    metadata:
+      labels:
+        app: pipelines
+    spec:
+      containers:
+        - name: pipelines
+          image: ghcr.io/open-webui/pipelines:main
+          ports:
+            - containerPort: 9099
+          volumeMounts:
+            - name: pipelines-data
+              mountPath: /app/pipelines
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          env:
+            - name: PIPELINES_URLS
+              value: "https://github.com/arsen3d/pipelines/blob/main/examples/filters/detoxify_filter_pipeline.py"
+          # env:
+          #   - name: HOST_GATEWAY
+          #     valueFrom:
+          #       fieldRef:
+          #         fieldPath: status.hostIP
+      volumes:
+        - name: pipelines-data
+          persistentVolumeClaim:
+            claimName: pipelines-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pipelines
+  labels:
+    app: pipelines
+spec:
+  selector:
+    app: pipelines
+  ports:
+    - protocol: TCP
+      port: 9099
+      targetPort: 9099
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pipelines-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
