@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bacalhautest
+  name: resource-provider
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bacalhautest
+      app: resource-provider
   template:
     metadata:
       labels:
-        app: bacalhautest
+        app: resource-provider
     spec:
       restartPolicy: Always
       containers:
