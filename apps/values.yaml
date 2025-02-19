@@ -4,3 +4,4 @@ spec:
   source:
     repoURL: https://github.com/arsen3d/argocd-example-apps
     targetRevision: HEAD
+    path: lilypad
