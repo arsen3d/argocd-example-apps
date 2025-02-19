@@ -24,4 +24,5 @@ appVersion: "1.0"
 # A list of files to include in the chart package.
 # This can be used to include additional files in the chart package.
 # For example, you can include a README.md file or a LICENSE file.
- 
+sources:
+  - lilypad
