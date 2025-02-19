@@ -38,14 +38,19 @@ spec:
             - name: bacalhau-data
               mountPath: /root/.bacalhau
           env:
-            - name: WEB3_PRIVATE_KEY
-            - name: WEB3_RPC_URL
-            - name: BACALHAU_API_HOST
-              value: "bacalhau"
-            - name: BACALHAU_NODE_CLIENTAPI_HOST
-              value: "bacalhau"
-            - name: BACALHAU_NODE_CLIENTAPI_PORT
-              value: "1234"
+            # - name: WEB3_PRIVATE_KEY
+          - name: WEB3_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                  name: resource-provider
+                  key: WEB3_PRIVATE_KEY
+          - name: WEB3_RPC_URL
+          - name: BACALHAU_API_HOST
+            value: "bacalhau"
+          - name: BACALHAU_NODE_CLIENTAPI_HOST
+            value: "bacalhau"
+          - name: BACALHAU_NODE_CLIENTAPI_PORT
+            value: "1234"
       volumes:
         - name: bacalhau-data
           emptyDir: {}
