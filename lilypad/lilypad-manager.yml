@@ -134,7 +134,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: app-service
   namespace: lilypad
 spec:
   selector:
@@ -193,6 +193,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app
+            name: app-service
             port:
               number: 81
