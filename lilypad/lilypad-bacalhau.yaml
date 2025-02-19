@@ -43,3 +43,21 @@ spec:
         - key: nvidia.com/gpu
           operator: Exists
           effect: NoSchedule
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bacalhau
+  namespace: lilypad
+  labels:
+    app: bacalhau
+    app.kubernetes.io/instance: lilypad
+spec:
+  selector:
+    app: bacalhau
+  ports:
+    - protocol: TCP
+      port: 1234
+      targetPort: 1234
+  type: ClusterIP
