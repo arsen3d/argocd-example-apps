@@ -83,6 +83,7 @@ spec:
       #     name: nginx-config
 
 ---
+# http://js-cli.lilypad.svc.cluster.local:3000
 apiVersion: v1
 kind: Service
 metadata:
