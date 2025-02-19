@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: init-config
           image: ipfs/kubo:latest
-          command: ['sh', '-c', 'ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"']
+          command: ['sh', '-c', 'ipfs init && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"']
           volumeMounts:
             - name: ipfs-config
               mountPath: /data/ipfs
