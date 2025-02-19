@@ -177,23 +177,23 @@ spec:
 #               name: lilypad
 
 
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: lilypad-ingress
-  namespace: lilypad
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-  - host: localhost
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: app-service
-            port:
-              number: 81
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: lilypad-ingress
+#   namespace: lilypad
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   rules:
+#   - host: localhost
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: app-service
+#             port:
+#               number: 81
