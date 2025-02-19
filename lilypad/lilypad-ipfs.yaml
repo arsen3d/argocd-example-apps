@@ -23,9 +23,10 @@ spec:
             ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]" &&
             ipfs config --json API.HTTPHeaders.Access-Control-Allow-Headers "[\"Authorization\", \"Content-Type\", \"X-Requested-With\", \"X-Stream-Output\", \"Range\"]" &&
             ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001 &&
+            ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080 &&
+            ipfs config --json Gateway.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]" &&
+            ipfs config --json Gateway.HTTPHeaders.Access-Control-Allow-Methods "[\"GET\"]" &&
             chown -R 1000:1000 /data/ipfs']
-            #    ipfs config --json Gateway.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]" &&
-            # ipfs config --json Gateway.HTTPHeaders.Access-Control-Allow-Methods "[\"GET\"]" &&
           volumeMounts:
             - name: ipfs-config
               mountPath: /data/ipfs
