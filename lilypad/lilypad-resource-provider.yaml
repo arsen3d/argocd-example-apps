@@ -16,8 +16,8 @@ spec:
       containers:
         - name: resource-provider
           image: ghcr.io/lilypad-tech/resource-provider:latest
-          args:
-            - "COMPUTTE_MODE=gpu"
+          # args:
+          #   - "COMPUTTE_MODE=gpu"
           resources:
             limits:
               cpu: "1000m"
