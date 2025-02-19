@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bacalhautest
+  name: bacalhau
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bacalhautest
+      app: bacalhau
   template:
     metadata:
       labels:
-        app: bacalhautest
+        app: bacalhau
     spec:
       restartPolicy: Always
       containers:
-        - name: bacalhautest
+        - name: bacalhau
           image: ghcr.io/lilypad-tech/bacalhau:latest
           resources:
             limits:
