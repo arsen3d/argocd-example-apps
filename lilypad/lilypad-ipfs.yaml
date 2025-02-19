@@ -15,7 +15,7 @@ spec:
       restartPolicy: Always
       initContainers:
         - name: init-config
-          image: busybox
+          image: ipfs/kubo:latest
           command: ['sh', '-c', 'ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"']
           volumeMounts:
             - name: ipfs-config
