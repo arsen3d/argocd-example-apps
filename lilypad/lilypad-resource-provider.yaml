@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bacalhautest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bacalhautest
+  template:
+    metadata:
+      labels:
+        app: bacalhautest
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: resource-provider
+          image: ghcr.io/lilypad-tech/resource-provider:latest
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+          securityContext:
+            capabilities:
+              add: ["SYS_ADMIN","NET_RAW"]
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+          command:
+            - /bin/sh
+            - -c
+            - "./run && bacalhau serve --orchestrator --compute"
+          volumeMounts:
+            - name: lilypad-data
+              mountPath: /tmp/lilypad/data
+            - name: bacalhau-data
+              mountPath: /root/.bacalhau
+          env:
+            - name: WEB3_PRIVATE_KEY
+            - name: WEB3_RPC_URL
+            - name: BACALHAU_API_HOST
+              value: "bacalhau"
+            - name: BACALHAU_NODE_CLIENTAPI_HOST
+              value: "bacalhau"
+            - name: BACALHAU_NODE_CLIENTAPI_PORT
+              value: "1234"
+      volumes:
+        - name: bacalhau-data
+          emptyDir: {}
+        - name: lilypad-data
+          emptyDir: {}
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
