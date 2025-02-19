@@ -13,6 +13,13 @@ spec:
         app: kubo
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: init-config
+          image: busybox
+          command: ['sh', '-c', 'ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"']
+          volumeMounts:
+            - name: ipfs-config
+              mountPath: /data/ipfs
       containers:
         - name: kubo
           image: ipfs/kubo:latest
@@ -25,6 +32,12 @@ spec:
           env:
             - name: IPFS_API_HTTPHeaders_Access_Control_Allow_Origin
               value: "*"
+          volumeMounts:
+            - name: ipfs-config
+              mountPath: /data/ipfs
+      volumes:
+        - name: ipfs-config
+          emptyDir: {}
 
 ---
 apiVersion: v1
