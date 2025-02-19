@@ -61,7 +61,7 @@ spec:
 
           # Make Lilypad executable and install it
           chmod +x lilypad
-          sudo mv lilypad /usr/local/bin/lilypad
+          mv lilypad /usr/local/bin/lilypad
           cd /workspace
           npm install
           npm run dev
