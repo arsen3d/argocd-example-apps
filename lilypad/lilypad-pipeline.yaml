@@ -67,7 +67,7 @@ spec:
     app: pipelines
   ports:
     - protocol: TCP
-      port: 9099
+      port: 9098
       targetPort: 9099
   type: LoadBalancer
 
