@@ -18,8 +18,6 @@ spec:
       port: 8201
       targetPort: 8201
   selector:
-    app.kubernetes.io/instance: vault
     app.kubernetes.io/name: vault
-    component: server
-  type: LoadBalancer
-  publishNotReadyAddresses: true
+    app.kubernetes.io/instance: vault-0
+    app.kubernetes.io/namespace: vault
