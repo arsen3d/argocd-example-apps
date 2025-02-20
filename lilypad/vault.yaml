@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-internal
+  namespace: lilypad
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8200
+      targetPort: 8200
+    - name: https-internal
+      protocol: TCP
+      port: 8201
+      targetPort: 8201
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+  type: LoadBalancer
+  publishNotReadyAddresses: true
