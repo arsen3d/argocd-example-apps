@@ -3,10 +3,14 @@ kind: Service
 metadata:
   name: lp-vault
   namespace: lilypad
-  labels:
-    app.kubernetes.io/instance: vault
-    app.kubernetes.io/name: vault
-    component: server
+  # labels:
+  #   app.kubernetes.io/instance: vault
+  #   app.kubernetes.io/name: vault
+  #   apps.kubernetes.io/pod-index: "0"
+  #   component: server
+  #   controller-revision-hash: vault-b75cdb86b
+  #   helm.sh/chart: vault-0.29.1
+  #   statefulset.kubernetes.io/pod-name: vault-0
 spec:
   ports:
     - name: http
