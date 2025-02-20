@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lilypad-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lilypad-postgres
+  template:
+    metadata:
+      labels:
+        app: lilypad-postgres
+    spec:
+      containers:
+      - name: db
+        image: postgres
+        env:
+        - name: POSTGRES_DB
+          value: "litellm"
+        - name: POSTGRES_USER
+          value: "llmproxy"
+        - name: POSTGRES_PASSWORD
+          value: "dbpassword9090"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: db-data
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: db-data-pvc
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/rancher/data/postgres-pvc
+---          
