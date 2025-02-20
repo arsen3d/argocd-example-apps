@@ -57,6 +57,8 @@ spec:
         env:
         # - name: DISABLE_IPV6
         #   value: "true"
+        - name: STORE_MODEL_IN_DB 
+          value: "True"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
