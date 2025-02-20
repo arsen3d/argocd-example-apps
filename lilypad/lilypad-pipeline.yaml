@@ -43,6 +43,12 @@ spec:
               memory: "256Mi"
               cpu: "250m"
           env:
+            # - name: WEB3_PRIVATE_KEY
+            - name: SK
+              valueFrom:
+                secretKeyRef:
+                    name: pipeline
+                    key: SK
             - name: PIPELINES_URLS
               value: "https://github.com/arsen3d/pipelines/blob/main/examples/pipelines/providers/ollama_pipeline.py"
           # env:
