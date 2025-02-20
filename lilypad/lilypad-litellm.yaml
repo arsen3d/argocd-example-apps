@@ -53,6 +53,14 @@ spec:
           requests:
             memory: "256Mi"
             cpu: "250m"
+        env:
+        # - name: DISABLE_IPV6
+        #   value: "true"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: services
+              key: DATABASE_URL
         envFrom:
         - secretRef:
             name: litellm-secrets
