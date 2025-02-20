@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: pipelines
-          image: ghcr.io/open-webui/pipelines:main
+          image: ghcr.io/open-webui/pipelines:git-dc18bdd
           ports:
             - containerPort: 9099
           volumeMounts:
