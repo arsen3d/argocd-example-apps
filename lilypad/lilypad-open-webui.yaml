@@ -130,12 +130,12 @@ spec:
             - name: open-webui-data
               mountPath: /app/backend/data
           resources:
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              cpu: "500m"
+              memory: "500Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
           # env:
           #   - name: OPENAI_API_KEY
           #     valueFrom:
