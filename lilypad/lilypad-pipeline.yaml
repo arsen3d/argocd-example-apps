@@ -59,13 +59,25 @@ spec:
   type: LoadBalancer
 
 ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pipelines-pvc
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
   name: pipelines-pvc
 spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
   accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/rancher/data/pipelines-pvc
