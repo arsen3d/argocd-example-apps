@@ -89,3 +89,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
+# http://pipelines-service.lilypad.svc.cluster.local:9098
