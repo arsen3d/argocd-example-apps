@@ -18,6 +18,7 @@ type: Opaque
 metadata:
   name: litellm-secrets
 data:
+  LITELLM_MASTER_KEY: bWVvd19pbV9hX2NhdA==
   CA_AZURE_OPENAI_API_KEY: bWVvd19pbV9hX2NhdA== # your api key in base64
 ---
 apiVersion: apps/v1
