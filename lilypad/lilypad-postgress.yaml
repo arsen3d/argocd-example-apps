@@ -13,8 +13,12 @@ spec:
         app: lilypad-postgres
     spec:
       containers:
-      - name: db
-        image: postgres
+      - name: lilypad-postgres
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+  
+        # image: postgres
         env:
         - name: POSTGRES_DB
           value: "litellm"
@@ -61,3 +65,15 @@ spec:
   hostPath:
     path: /var/lib/rancher/data/postgres-pvc
 ---          
+apiVersion: v1
+kind: Service
+metadata:
+  name: lilypad-postgres
+spec:
+  type: LoadBalancer
+  selector:
+    app: lilypad-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
