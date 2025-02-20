@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pipelines-pvc
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/rancher/data/pipelines-pvc
+---    
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -69,15 +82,3 @@ spec:
 #   resources:
 #     requests:
 #       storage: 1Gi
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pipelines-pvc
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: /var/lib/rancher/data/pipelines-pvc
