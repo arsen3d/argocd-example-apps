@@ -44,7 +44,7 @@ spec:
               cpu: "250m"
           env:
             - name: PIPELINES_URLS
-              value: "https://github.com/arsen3d/pipelines/blob/main/examples/filters/proxy_filter_pipeline.py"
+              value: "https://github.com/arsen3d/pipelines/blob/main/examples/pipelines/providers/ollama_pipeline.py"
           # env:
           #   - name: HOST_GATEWAY
           #     valueFrom:
