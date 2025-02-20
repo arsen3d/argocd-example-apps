@@ -59,3 +59,17 @@ spec:
         - name: config-volume
           configMap:
             name: litellm-config-file
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: litellm-service
+  namespace: lilypad
+spec:
+  type: LoadBalancer
+  selector:
+    app: litellm
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
