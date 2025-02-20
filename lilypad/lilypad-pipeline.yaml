@@ -42,9 +42,9 @@ spec:
             requests:
               memory: "256Mi"
               cpu: "250m"
-          env:
-            - name: PIPELINES_URLS
-              value: "https://github.com/arsen3d/pipelines/blob/main/examples/filters/detoxify_filter_pipeline.py"
+          # env:
+          #   - name: PIPELINES_URLS
+          #     value: "https://github.com/arsen3d/pipelines/blob/main/examples/filters/detoxify_filter_pipeline.py"
           # env:
           #   - name: HOST_GATEWAY
           #     valueFrom:
