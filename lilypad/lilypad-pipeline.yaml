@@ -46,9 +46,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pipelines
+  name: pipelines-service
   labels:
-    app: pipelines
+    app: pipelines-service
 spec:
   selector:
     app: pipelines
