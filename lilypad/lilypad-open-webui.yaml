@@ -1,0 +1,175 @@
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pipelines-pvc
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 10Gi
+#   accessModes:
+#     - ReadWriteMany
+#   hostPath:
+#     path: /var/lib/rancher/data/pipelines-pvc
+# ---    
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: pipelines
+#   labels:
+#     app: pipelines
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: pipelines
+#   template:
+#     metadata:
+#       labels:
+#         app: pipelines
+#     spec:
+#       containers:
+#         - name: pipelines
+#           image: ghcr.io/open-webui/pipelines:git-dc18bdd
+#           ports:
+#             - containerPort: 9099
+#           volumeMounts:
+#             - name: pipelines-data
+#               mountPath: /app/pipelines
+#           resources:
+#             limits:
+#               memory: "512Mi"
+#               cpu: "500m"
+#             requests:
+#               memory: "256Mi"
+#               cpu: "250m"
+#           env:
+#             # - name: WEB3_PRIVATE_KEY
+#             - name: SK
+#               valueFrom:
+#                 secretKeyRef:
+#                     name: pipeline
+#                     key: SK
+#             - name: PIPELINES_URLS
+#               value: "https://github.com/arsen3d/pipelines/blob/main/examples/pipelines/providers/ollama_pipeline.py"
+#           # env:
+#           #   - name: HOST_GATEWAY
+#           #     valueFrom:
+#           #       fieldRef:
+#           #         fieldPath: status.hostIP
+#       volumes:
+#         - name: pipelines-data
+#           persistentVolumeClaim:
+#             claimName: pipelines-pvc
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: pipelines-service
+#   labels:
+#     app: pipelines-service
+# spec:
+#   selector:
+#     app: pipelines
+#   ports:
+#     - protocol: TCP
+#       port: 9098
+#       targetPort: 9099
+#   type: LoadBalancer
+
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pipelines-pvc
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 10Gi
+# # http://pipelines-service.lilypad.svc.cluster.local:9098
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: open-webui-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/rancher/data/open-webui
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-webui
+  labels:
+    app: open-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-webui
+  template:
+    metadata:
+      labels:
+        app: open-webui
+    spec:
+      containers:
+        - name: open-webui
+          image: ghcr.io/open-webui/open-webui:main
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: open-webui-data
+              mountPath: /app/backend/data
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          # env:
+          #   - name: OPENAI_API_KEY
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: open-webui
+          #         key: openai-api-key
+      volumes:
+        - name: open-webui-data
+          persistentVolumeClaim:
+            claimName: open-webui-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-webui-service
+  labels:
+    app: open-webui-service
+spec:
+  selector:
+    app: open-webui
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: open-webui-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
