@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kubo
+  namespace: lilypad
 spec:
   replicas: 1
   selector:
@@ -62,6 +63,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kubo-rpc
+  namespace: lilypad
 spec:
   selector:
     app: kubo
@@ -76,6 +78,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kubo-gateway
+  namespace: lilypad
 spec:
   selector:
     app: kubo

@@ -27,6 +27,8 @@ kind: Deployment
 metadata:
   name: litellm-deployment
   namespace: lilypad
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   labels:
     app: litellm
 spec:
