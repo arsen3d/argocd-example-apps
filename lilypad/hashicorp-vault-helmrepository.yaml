@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: hashicorp-vault
+  labels:
+    app.kubernetes.io/name: helm-repo
+spec:
+  url: https://helm.releases.hashicorp.com
+  interval: 1m0s
