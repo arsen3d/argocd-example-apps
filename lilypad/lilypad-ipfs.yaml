@@ -71,7 +71,7 @@ spec:
     - protocol: TCP
       port: 5001
       targetPort: 5001
-  type: LoadBalancer
+  type: NodePort
 
 ---
 apiVersion: v1
@@ -86,4 +86,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: LoadBalancer
+  type: NodePort

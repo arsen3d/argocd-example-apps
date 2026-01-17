@@ -79,7 +79,7 @@ spec:
     - protocol: TCP
       port: 9098
       targetPort: 9099
-  type: LoadBalancer
+  type: NodePort
 
 ---
 apiVersion: v1

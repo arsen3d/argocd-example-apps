@@ -80,7 +80,7 @@ metadata:
   name: litellm-service
   namespace: lilypad
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: litellm
   ports:

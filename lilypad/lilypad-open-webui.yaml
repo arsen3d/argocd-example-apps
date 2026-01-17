@@ -75,7 +75,7 @@
 #     - protocol: TCP
 #       port: 9098
 #       targetPort: 9099
-#   type: LoadBalancer
+#   type: NodePort
 
 # ---
 # apiVersion: v1
@@ -162,7 +162,7 @@ spec:
     - protocol: TCP
       port: 3001
       targetPort: 8080
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
