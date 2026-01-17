@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-secrets-operator
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # Official Helm chart repository for ESO
+    repoURL: 'https://charts.external-secrets.io'
+    chart: external-secrets
+    targetRevision: 0.9.11 # Recommended: Specify a stable version
+    helm:
+      parameters:
+        - name: installCRDs
+          value: "true" # Required to install ESO Custom Resource Definitions
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: external-secrets
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true # Automatically creates the 'external-secrets' namespace
